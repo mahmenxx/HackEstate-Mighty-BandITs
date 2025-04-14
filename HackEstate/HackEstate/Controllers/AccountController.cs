@@ -1,4 +1,5 @@
 ﻿using HackEstate.Authentication;
+using HackEstate.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlTypes;
@@ -53,13 +54,14 @@ namespace HackEstate.Controllers
                         return RedirectToAction("Error", "Shared");
                 }
             }
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
-            var validLogin = _userRepo.Table.Where(m => m.Username == username && m.Password.Equals(password)).FirstOrDefault();
+            var validLogin = _userRepo.Table.Where(m => m.Email == email && m.Password.Equals(password)).FirstOrDefault();
 
             if (validLogin != null)
             {
@@ -73,5 +75,39 @@ namespace HackEstate.Controllers
             }
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Register(string FirstName, string LastName, string Email, string ContactNo, string Username, string Password, string Address, int Role)
+        {
+            var newUser = new User()
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Password = Password,
+                Address = Address,
+                Username = Username,
+                RoleId = Role
+            };
+
+            _userRepo.Create(newUser);
+
+            TempData["success"] = "Successfully registered. You may now login.";
+            return RedirectToAction("Login");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            await this._signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
     }
 }

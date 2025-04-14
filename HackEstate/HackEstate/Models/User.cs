@@ -23,6 +23,8 @@ public partial class User
 
     public string? Password { get; set; }
 
+    public string? IdentificationCardUrl { get; set; }
+
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
     public virtual ICollection<ChatMessage> ChatMessageFromUsers { get; set; } = new List<ChatMessage>();

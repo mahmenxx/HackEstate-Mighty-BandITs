@@ -83,6 +83,7 @@ namespace HackEstate.Authentication
             {
                 new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String, "hackestate"),
                 new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, "hackestate"),
+                new Claim(ClaimTypes.Role, user.RoleId.ToString(), ClaimValueTypes.Integer, "hackestate"),
 
                 new Claim("UserId", userId, ClaimValueTypes.String, "hackestate"),
                 new Claim("UserName", name, ClaimValueTypes.String, "hackestate")
@@ -153,7 +154,7 @@ namespace HackEstate.Authentication
         public async Task SignOutAsync()
         {
             var token = _configuration.GetTokenAuthentication();
-            await _httpContextAccessor.HttpContext.SignOutAsync("projectgreen");
+            await _httpContextAccessor.HttpContext.SignOutAsync("hackestate");
         }
     }
 }

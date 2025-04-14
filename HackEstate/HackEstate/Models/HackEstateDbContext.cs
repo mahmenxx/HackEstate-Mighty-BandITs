@@ -31,7 +31,7 @@ public partial class HackEstateDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=JULES-IRWIN\\SQLEXPRESS;Database=HackEstateDB;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
+        => optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server=JULES-IRWIN\\SQLEXPRESS;Database=HackEstateDB;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -140,9 +140,7 @@ public partial class HackEstateDbContext : DbContext
             entity.ToTable("User");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Address)
-                .HasMaxLength(50)
-                .HasColumnName("address");
+            entity.Property(e => e.Address).HasColumnName("address");
             entity.Property(e => e.Contact)
                 .HasMaxLength(50)
                 .HasColumnName("contact");
@@ -152,6 +150,7 @@ public partial class HackEstateDbContext : DbContext
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .HasColumnName("firstName");
+            entity.Property(e => e.IdentificationCardUrl).HasColumnName("identificationCardURL");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .HasColumnName("lastName");

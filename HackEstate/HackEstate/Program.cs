@@ -12,6 +12,24 @@ builder.Services.AddScoped<SignInManager>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenProviderOptionsFactory>();
 builder.Services.AddScoped<MailManager>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "hackestate"; // Set the default authentication scheme
+    options.DefaultSignInScheme = "hackestate"; // Set the sign-in scheme
+    options.DefaultChallengeScheme = "hackestate"; // Set the challenge scheme
+}).AddCookie("hackestate", options =>
+{
+    options.LoginPath = "/Account/Login"; // Define where to redirect if not authenticated
+    options.LogoutPath = "/Account/Logout"; // Define logout path
+    options.ExpireTimeSpan = TimeSpan.FromDays(1); // Set cookie expiration
+    options.SlidingExpiration = true; // Optional: enable sliding expiration
+});
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true; // Required for session to work
+});
 
 var app = builder.Build();
 
