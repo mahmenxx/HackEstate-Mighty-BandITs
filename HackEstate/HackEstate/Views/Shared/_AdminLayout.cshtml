@@ -22,26 +22,51 @@
         <div class="logo">
             <img src="~/Logo.png" alt="EventTahan Logo">
         </div>
-        <a href="#"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-        <a href="#"><i class="fas fa-home"></i> <span>Properties</span></a>
-        <a href="#"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
-        <a href="#"><i class="fas fa-users"></i> <span>Users</span></a>
-        <a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
-        <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        <a asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+        <a  asp-controller="Admin" asp-action="Properties"><i class="fas fa-home"></i> <span>Properties</span></a>
+        <a  asp-controller="Admin" asp-action="Events"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
+        <a asp-controller="Admin" asp-action="Users" class="active"><i class="fas fa-users"></i> <span>Users</span></a>
+        <a asp-controller="Admin" asp-action="Settings"><i class="fas fa-cog"></i> <span>Settings</span></a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </div>
+
+        <!-- User Info (Floating in Upper-Right Corner) -->
+    <div class="user-info dropdown" id="user-info">
+        <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://via.placeholder.com/40" alt="User Avatar">
+            <span>Admin User</span>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
     </div>
 
     <!-- Main Content -->
     @RenderBody()
 
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-logout" asp-controller="Account" asp-action="Logout">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('collapsed');
-        }
-    </script>
+    <script src="~/AdminLayout/js/main.js"></script>
 </body>
 </html>

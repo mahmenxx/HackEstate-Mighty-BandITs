@@ -9,23 +9,14 @@ namespace HackEstate.Controllers
 {
     public class AdminController : BaseController
     {
-
-        private readonly SignInManager _signInManager;
-        private readonly TokenValidationParametersFactory _tokenValidationParametersFactory;
-        private readonly TokenProviderOptionsFactory _tokenProviderOptionsFactory;
         private readonly IConfiguration _appConfiguration;
 
-        public AdminController(SignInManager signInManager,
+        public AdminController(
                             IHttpContextAccessor httpContextAccessor,
                             ILoggerFactory loggerFactory,
-                            IConfiguration configuration,
-                            TokenValidationParametersFactory tokenValidationParametersFactory,
-                            TokenProviderOptionsFactory tokenProviderOptionsFactory
+                            IConfiguration configuration
             )
         {
-            _signInManager = signInManager;
-            this._tokenProviderOptionsFactory = tokenProviderOptionsFactory;
-            this._tokenValidationParametersFactory = tokenValidationParametersFactory;
             this._appConfiguration = configuration;
         }
 
@@ -33,7 +24,7 @@ namespace HackEstate.Controllers
         [AllowAnonymous]
         public IActionResult Dashboard()
         {
-            ViewData["title"] = "Admin Dashboard";
+            ViewData["title"] = "Dashboard";
             return View();
         }
 
@@ -41,7 +32,7 @@ namespace HackEstate.Controllers
         [AllowAnonymous]
         public IActionResult Properties()
         {
-            ViewData["title"] = "Admin Properties";
+            ViewData["title"] = "Properties";
             return View();
         }
 
@@ -49,7 +40,23 @@ namespace HackEstate.Controllers
         [AllowAnonymous]
         public IActionResult Users()
         {
-            ViewData["title"] = "Admin Users";
+            ViewData["title"] = "Users";
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Events()
+        {
+            ViewData["title"] = "Events";
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Settings()
+        {
+            ViewData["title"] = "Settings";
             return View();
         }
     }
