@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!-- Main Content -->
+<div class="main-content" id="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h4>Properties</h4>
+        <div class="d-flex align-items-center gap-3">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search properties..." onkeyup="filterProperties()">
+            </div>
+            <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add Property</button>
+        </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Property Listings</h5>
+        </div>
+        <div class="card-body">
+            <table class="table" id="properties-table">
+                <thead>
+                    <tr>
+                        <th>Property Name</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Address</th>
+                        <th>Seller</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Modern Villa</td>
+                        <td>Residential</td>
+                        <td>$450,000</td>
+                        <td><span class="badge bg-success">Available</span></td>
+                        <td>123 Main St, City</td>
+                        <td>James Porter</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Event Hall</td>
+                        <td>Commercial</td>
+                        <td>$1,200,000</td>
+                        <td><span class="badge bg-danger">Sold</span></td>
+                        <td>456 Oak Ave, Town</td>
+                        <td>James Porter</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cozy Apartment</td>
+                        <td>Residential</td>
+                        <td>$250,000</td>
+                        <td><span class="badge bg-warning">Pending</span></td>
+                        <td>789 Pine Rd, Village</td>
+                        <td>James Porter</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

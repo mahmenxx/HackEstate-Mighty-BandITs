@@ -1,0 +1,107 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content" id="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h4>@ViewData["title"]</h4>
+        <div class="user-info">
+            <img src="https://via.placeholder.com/40" alt="User Avatar">
+            <span>Admin User</span>
+        </div>
+    </div>
+
+    <!-- Metrics Section -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h5>24</h5>
+                <p>Total Properties</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h5>15</h5>
+                <p>Upcoming Events</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h5>120</h5>
+                <p>Agents</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <h5>200</h5>
+                <p>Buyers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Events Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Recent Events</h5>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Open House</td>
+                        <td>2025-04-20</td>
+                        <td>123 Main St</td>
+                        <td><span class="badge bg-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Property Expo</td>
+                        <td>2025-04-25</td>
+                        <td>Downtown Center</td>
+                        <td><span class="badge bg-warning">Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Property Listings Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Property Listings</h5>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Modern Villa</td>
+                        <td>Residential</td>
+                        <td>$450,000</td>
+                        <td><span class="badge bg-success">Available</span></td>
+                    </tr>
+                    <tr>
+                        <td>Event Hall</td>
+                        <td>Commercial</td>
+                        <td>$1,200,000</td>
+                        <td><span class="badge bg-danger">Sold</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

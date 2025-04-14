@@ -1,0 +1,92 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!-- Main Content -->
+<div class="main-content" id="main-content">
+    <!-- Header -->
+    <div class="header">
+        <h4>Users</h4>
+        <div class="d-flex align-items-center gap-3">
+            <div class="filter-dropdown dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by Role
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="filterUsers('All')">All</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="filterUsers('Buyer')">Buyer</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="filterUsers('Seller')">Seller</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="filterUsers('Agent')">Agent</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add User</button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">User List</h5>
+        </div>
+        <div class="card-body">
+            <table class="table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-role="Buyer">
+                        <td>John Doe</td>
+                        <td>john.doe@example.com</td>
+                        <td>Buyer</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>2025-01-15</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr data-role="Seller">
+                        <td>Jane Smith</td>
+                        <td>jane.smith@example.com</td>
+                        <td>Seller</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>2025-02-10</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr data-role="Agent">
+                        <td>Mike Johnson</td>
+                        <td>mike.johnson@example.com</td>
+                        <td>Agent</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>2025-03-01</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr data-role="Buyer">
+                        <td>Emily Davis</td>
+                        <td>emily.davis@example.com</td>
+                        <td>Buyer</td>
+                        <td><span class="badge bg-danger">Inactive</span></td>
+                        <td>2025-04-05</td>
+                        <td>
+                            <button class="action-btn edit me-2"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
