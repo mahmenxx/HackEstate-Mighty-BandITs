@@ -1,0 +1,145 @@
+﻿@model Property
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    var isOwner = userId == Model.User?.Id.ToString();
+
+    var agentProperty = ViewBag.AgentProperty as AgentProperty;
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@Model.Title</h2>
+            <img src="https://via.placeholder.com/800x400?text=Property+Image" class="img-fluid mb-3" alt="Property Image" />
+            <p><strong>Location:</strong> @Model.Location</p>
+            <p><strong>Price:</strong> ₱@String.Format("{0:N0}", Model.Price)</p>
+            <p><strong>Bedrooms:</strong> @Model.BedroomQty</p>
+            <p><strong>Bathrooms:</strong> @Model.BathroomQty</p>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Property Type:</strong> @Model.PropertyType</p>
+
+            @if (isOwner)
+            {
+                <a href="@Url.Action("Edit", "Property", new { id = Model.Id })" class="btn btn-outline-primary mt-3">Edit Property</a>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    @if (!isOwner)
+                    {
+                        if (agentProperty != null)
+                        {
+                            <h5 class="card-title">Agent Information</h5>
+                            <p><strong>Name:</strong> @agentProperty.Agent.FirstName</p>
+                            <p><strong>Email:</strong> @agentProperty.Agent.Email</p>
+                            <p><strong>Phone:</strong> @agentProperty.Agent.Contact</p>
+
+                      <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
+    Connect with Agent
+</button>
+
+                        }
+                    }
+                    else
+                    {
+                        <h5 class="text-muted text-center">You are the owner of this property.</h5>
+                        if (agentProperty != null)
+                        {
+                            <h5 class="card-title">Agent Information</h5>
+                            <p><strong>Name:</strong> @agentProperty.Agent.FirstName</p>
+                            <p><strong>Email:</strong> @agentProperty.Agent.Email</p>
+                            <p><strong>Phone:</strong> @agentProperty.Agent.Contact</p>
+
+                            <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
+                                Connect with Agent
+                            </button>
+
+                        }
+                        else
+                        {
+                            <h5 class="card-title">This property is not currently handled by an agent.</h5>
+                            <button class="btn btn-outline-secondary w-100 mt-3" onclick="findAgentAI(@Model.Id)">
+                                🤖 Find Agent through AI
+                            </button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for contacting agent -->
+@if (!isOwner && agentProperty != null)
+{
+    <div class="modal fade" id="contactAgentModal" tabindex="-1" aria-labelledby="contactAgentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="@Url.Action("SendMessage", "Property")">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactAgentModalLabel">Send Message to Agent</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="agentId" value="@agentProperty.Agent.Id" />
+                        <input type="hidden" name="propertyId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Hi, I'm interested in this property..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isOwner && agentProperty != null)
+{
+    <div class="modal fade" id="contactAgentModal" tabindex="-1" aria-labelledby="contactAgentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="@Url.Action("SendMessage", "Property")">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactAgentModalLabel">Send Message to your Agent</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="agentId" value="@agentProperty.Agent.Id" />
+                        <input type="hidden" name="propertyId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Hi, agent. Are there updates regarding..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function findAgentAI(propertyId) {
+        // This can call a backend endpoint or show a loading modal
+        alert("Our AI is finding the best agent for this property...");
+        // Optionally call:
+        // $.post("/Property/FindAgent", { id: propertyId }, function(result) { ... });
+    }
+</script>
+

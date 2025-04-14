@@ -14,6 +14,7 @@ namespace HackEstate.Controllers
         public BaseRepository<Event> _eventRepo;
         public BaseRepository<ChatMessage> _chatMessageRepo;
         public BaseRepository<PropertyImage> _propertyImageRepo;
+        public BaseRepository<UserQuizAnswer> _userQuizAnswerRepo;
         protected readonly IHttpContextAccessor _httpContextAccessor;
 
         protected readonly MailManager _mailManager;
@@ -27,6 +28,7 @@ namespace HackEstate.Controllers
             _eventRepo = new BaseRepository<Event>();
             _chatMessageRepo = new BaseRepository<ChatMessage>();
             _propertyImageRepo = new BaseRepository<PropertyImage>();
+            _userQuizAnswerRepo = new BaseRepository<UserQuizAnswer>();
         }
     }
 }

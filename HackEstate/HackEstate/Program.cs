@@ -1,12 +1,17 @@
 using HackEstate.Authentication;
 using HackEstate.Managers;
 using HackEstate.Models;
+using Newtonsoft;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-builder.Services.Configure<TokenAuthentication>(builder.Configuration.GetSection("TokenAuthentication"));
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    }); builder.Services.Configure<TokenAuthentication>(builder.Configuration.GetSection("TokenAuthentication"));
 builder.Services.AddScoped<TokenValidationParametersFactory>();
 builder.Services.AddScoped<SignInManager>();
 builder.Services.AddHttpContextAccessor();

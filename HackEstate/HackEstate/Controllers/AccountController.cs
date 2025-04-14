@@ -66,6 +66,14 @@ namespace HackEstate.Controllers
             if (validLogin != null)
             {
                 await this._signInManager.SignInAsync(validLogin);
+                if (validLogin.Status.Equals("INACTIVE") && validLogin.RoleId != 1)
+                {
+                    return RedirectToAction("IntroQuiz", "Home");
+                }
+                if (validLogin.IdentificationCardUrl != null && validLogin.RoleId == 1)
+                {
+                    return RedirectToAction("VerifyAgent", "Home");
+                }
                 return RedirectToAction("Dashboard", "Home");
             }
             else
@@ -94,7 +102,8 @@ namespace HackEstate.Controllers
                 Password = Password,
                 Address = Address,
                 Username = Username,
-                RoleId = Role
+                RoleId = Role,
+                Status = "INACTIVE"
             };
 
             _userRepo.Create(newUser);

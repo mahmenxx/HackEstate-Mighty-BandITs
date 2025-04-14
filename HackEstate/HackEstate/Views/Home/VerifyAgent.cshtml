@@ -1,0 +1,96 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Verify Agent</title>
+    <style>
+        body {
+            font-family: Arial;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        video, canvas {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Verify Agent Identity</h2>
+
+    <video id="video" width="320" height="240" autoplay></video>
+    <br />
+    <button id="capture">Capture & Verify</button>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+    <p id="status"></p>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const statusText = document.getElementById('status');
+        const context = canvas.getContext('2d');
+
+        // Request access to webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                statusText.innerText = "Failed to access webcam: " + err.message;
+            });
+
+        document.getElementById('capture').addEventListener('click', async () => {
+            // Draw video frame to canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Get base64 from canvas
+            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1]; // remove "data:image/jpeg;base64,"
+
+            statusText.innerText = "Verifying, please wait...";
+
+            try {
+                const response = await fetch('/FaceComparison/CompareImages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ capturedImageBase64: base64Image })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const confidence = result.data.confidence;
+                    statusText.innerText = "Confidence: " + confidence + "%";
+
+                    if (confidence >= 75) {
+                        statusText.innerText = "Face verified! Redirecting to dashboard...";
+                        setTimeout(() => {
+                            window.location.href = "/Home/Dashboard";
+                        }, 1500);
+                    } else {
+                        statusText.innerText = "Face not recognized. Please try again.";
+                    }
+                } else {
+                    statusText.innerText = "Error: " + result.message;
+                }
+            } catch (error) {
+                statusText.innerText = "Request failed: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -27,6 +27,8 @@ public partial class Property
 
     public string? Amenities { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
     public virtual ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();

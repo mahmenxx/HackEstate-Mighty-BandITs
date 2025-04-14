@@ -1,7 +1,137 @@
 ﻿@{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listAgents = ViewBag.Agents as List<User>;
+    var roleId = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
 }
+
+<!--/ Carousel Start /-->
+<div class="intro intro-carousel">
+    <div id="carousel" class="owl-carousel owl-theme">
+
+        <!-- Manila -->
+        <div class="carousel-item-a intro-item bg-image" style="background-image: url(/MainLayout/img/slide-1.jpg)">
+            <div class="overlay overlay-a"></div>
+            <div class="intro-content display-table">
+                <div class="table-cell">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="intro-body">
+                                    <p class="intro-title-top">
+                                        The future of Real-Estate
+                                        <br> EvenTahan
+                                    </p>
+                                    <h1 class="intro-title mb-4">
+                                        <span class="color-b" style="-webkit-text-stroke: 0.5px white;">Built </span> on Trust.
+                                        <br> Powered by AI.
+                                    </h1>
+                                    <p class="intro-subtitle intro-price">
+                                        @*  <a href="https://maps.google.com?q=1234+Taft+Ave,+Manila" target="_blank">
+                                        <span class="price-a">rent | ₱ 25,000</span>
+                                        </a> *@
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cebu City -->
+        <div class="carousel-item-a intro-item bg-image" style="background-image: url(/MainLayout/img/slide-2.jpg)">
+            <div class="overlay overlay-a"></div>
+            <div class="intro-content display-table">
+                <div class="table-cell">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="intro-body">
+                                    <p class="intro-title-top">
+                                        Cebu City, Cebu
+                                        <br> 6000
+                                    </p>
+                                    <h1 class="intro-title mb-4">
+                                        <span class="color-b">56 </span> Gorordo Avenue
+                                        <br> Lahug, Cebu City
+                                    </h1>
+                                    <p class="intro-subtitle intro-price">
+                                        <a href="https://maps.google.com?q=56+Gorordo+Ave,+Cebu+City" target="_blank">
+                                            <span class="price-a">rent | ₱ 18,000</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Davao City -->
+        <div class="carousel-item-a intro-item bg-image" style="background-image: url(/MainLayout/img/slide-3.jpg)">
+            <div class="overlay overlay-a"></div>
+            <div class="intro-content display-table">
+                <div class="table-cell">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="intro-body">
+                                    <p class="intro-title-top">
+                                        Davao City, Davao del Sur
+                                        <br> 8000
+                                    </p>
+                                    <h1 class="intro-title mb-4">
+                                        <span class="color-b">789 </span> J.P. Laurel Avenue
+                                        <br> Bajada, Davao City
+                                    </h1>
+                                    <p class="intro-subtitle intro-price">
+                                        <a href="https://maps.google.com?q=789+JP+Laurel+Ave,+Davao+City" target="_blank">
+                                            <span class="price-a">rent | ₱ 15,500</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--/ Carousel End /-->
 <br />
 <br />
 <br />
-<h1>DASHBOARD</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h1>Welcome to EvenTahan, @User.Identity.Name</h1>
+    @if (roleId != "1")
+    {
+        <h2> Recommended agents </h2>
+        if (listAgents == null)
+        {
+            <p>You have to answer the quiz to see your recommended agents! <a href="~/Home/IntroQuiz">Answer here!</a> </p>
+        }
+        else
+        {
+            foreach (var agent in listAgents)
+            {
+                <p>@agent.FirstName</p>
+            }
+
+        }
+    }
+    else
+    {
+        <h2> Your clients </h2>
+
+    }
+}
+
+
+
+

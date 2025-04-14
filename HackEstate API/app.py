@@ -27,11 +27,13 @@ modelAIAgent = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
     system_instruction="""
-    You are going to be assigning a buyer to a specific agent in real estate with the agent details, their clients (Seller).
-    Then you will be basing in with the buyer's answers in which you will assign an agent to them.
+    You are going to be assigning a seller/buyer to a specific agent in real estate with the agent details.
+    Then you will be basing in with the seller/buyer's answers in which you will assign an agent to them.
     Be accurate about it.
+    If User has RoleId of 3, that is Seller.
+    If User has RoleId of 2, that is Buyer.
     
-    Just answer the agent ID you recommend, no other answers! If you are not sure of where to assign it, just type 0.
+    Just list agent IDs you recommend per line, no other answers! If you are not sure of where to assign it, just type 0.
     """
 )
 
@@ -88,7 +90,7 @@ def chat():
     try:
         user_input = request.form.get('input')
         response_text = process_text_input(user_input)
-
+        print(user_input)
         # Ensure response is valid JSON
         print(response_text)
         return jsonify({"success": True, "recommendation": response_text})

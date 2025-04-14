@@ -29,6 +29,8 @@ public partial class HackEstateDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserQuizAnswer> UserQuizAnswers { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server=JULES-IRWIN\\SQLEXPRESS;Database=HackEstateDB;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
@@ -104,6 +106,9 @@ public partial class HackEstateDbContext : DbContext
             entity.Property(e => e.PropertyType)
                 .HasMaxLength(50)
                 .HasColumnName("propertyType");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasColumnName("status");
             entity.Property(e => e.Title).HasColumnName("title");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -144,6 +149,7 @@ public partial class HackEstateDbContext : DbContext
             entity.Property(e => e.Contact)
                 .HasMaxLength(50)
                 .HasColumnName("contact");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");
@@ -158,6 +164,9 @@ public partial class HackEstateDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("password");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasColumnName("status");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
@@ -166,6 +175,33 @@ public partial class HackEstateDbContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_User_Role");
+        });
+
+        modelBuilder.Entity<UserQuizAnswer>(entity =>
+        {
+            entity.ToTable("UserQuizAnswer");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BudgetMax).HasColumnName("budgetMax");
+            entity.Property(e => e.BudgetMin).HasColumnName("budgetMin");
+            entity.Property(e => e.MostImportantInAgent)
+                .HasMaxLength(50)
+                .HasColumnName("mostImportantInAgent");
+            entity.Property(e => e.PreferCommunication)
+                .HasMaxLength(50)
+                .HasColumnName("preferCommunication");
+            entity.Property(e => e.PreferredLocation).HasColumnName("preferredLocation");
+            entity.Property(e => e.TypeOfProperty)
+                .HasMaxLength(50)
+                .HasColumnName("typeOfProperty");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.WhenToBuy)
+                .HasMaxLength(50)
+                .HasColumnName("whenToBuy");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserQuizAnswers)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserQuizAnswer_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

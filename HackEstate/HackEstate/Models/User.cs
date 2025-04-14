@@ -25,6 +25,10 @@ public partial class User
 
     public string? IdentificationCardUrl { get; set; }
 
+    public string? Status { get; set; }
+
+    public string? Description { get; set; }
+
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
     public virtual ICollection<ChatMessage> ChatMessageFromUsers { get; set; } = new List<ChatMessage>();
@@ -36,4 +40,6 @@ public partial class User
     public virtual ICollection<Property> Properties { get; set; } = new List<Property>();
 
     public virtual Role? Role { get; set; }
+
+    public virtual ICollection<UserQuizAnswer> UserQuizAnswers { get; set; } = new List<UserQuizAnswer>();
 }
