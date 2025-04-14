@@ -9,6 +9,8 @@ namespace HackEstate.Controllers
         {
             var property = _propertyRepo.Get(id);
             ViewBag.AgentProperty = _agentPropertyRepo.Table.Where(m => m.PropertyId == id).FirstOrDefault();
+            var chatMessages = _chatMessageRepo.Table.Where(m => m.PropertyId == id).ToList();
+            ViewBag.ChatMessages = chatMessages;
             return View(property);
         }
 
@@ -21,7 +23,8 @@ namespace HackEstate.Controllers
             {
                 FromUserId = userId,
                 ToUserId = agentId,
-                Message = message
+                Message = message,
+                PropertyId = propertyId
             };
             _chatMessageRepo.Create(newChat);
 

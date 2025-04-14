@@ -9,21 +9,63 @@
     <title>Verify Agent</title>
     <style>
         body {
-            font-family: Arial;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9fb;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 50px;
+            padding-top: 60px;
         }
 
-        video, canvas {
-            border: 1px solid #ccc;
-            margin-top: 10px;
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        video {
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #capture {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            margin-top: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            #capture:hover {
+                background-color: #45a049;
+            }
+
+        canvas {
+            display: none;
         }
 
         #status {
-            margin-top: 15px;
-            font-weight: bold;
+            margin-top: 20px;
+            font-weight: 600;
+            color: #555;
+            min-height: 24px;
+            transition: color 0.3s ease;
+        }
+
+            #status.success {
+                color: #2e7d32;
+            }
+
+            #status.error {
+                color: #d32f2f;
+            }
+
+        #loader {
+            display: none;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -33,7 +75,7 @@
     <video id="video" width="320" height="240" autoplay></video>
     <br />
     <button id="capture">Capture & Verify</button>
-    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <canvas id="canvas" width="320" height="240"></canvas>
 
     <p id="status"></p>
 
@@ -43,23 +85,21 @@
         const statusText = document.getElementById('status');
         const context = canvas.getContext('2d');
 
-        // Request access to webcam
+        // Get webcam access
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
                 video.srcObject = stream;
             })
             .catch(err => {
-                statusText.innerText = "Failed to access webcam: " + err.message;
+                showStatus("Failed to access webcam: " + err.message, "error");
             });
 
         document.getElementById('capture').addEventListener('click', async () => {
-            // Draw video frame to canvas
+            // Take snapshot from video
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
 
-            // Get base64 from canvas
-            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1]; // remove "data:image/jpeg;base64,"
-
-            statusText.innerText = "Verifying, please wait...";
+            showStatus("Verifying, please wait...", "neutral");
 
             try {
                 const response = await fetch('/FaceComparison/CompareImages', {
@@ -74,23 +114,28 @@
 
                 if (result.success) {
                     const confidence = result.data.confidence;
-                    statusText.innerText = "Confidence: " + confidence + "%";
-
-                    if (confidence >= 75) {
-                        statusText.innerText = "Face verified! Redirecting to dashboard...";
+                    if (confidence >= 70) {
+                        showStatus(`Face verified! Confidence: ${confidence.toFixed(1)}%. Redirecting...`, "success");
                         setTimeout(() => {
                             window.location.href = "/Home/Dashboard";
                         }, 1500);
                     } else {
-                        statusText.innerText = "Face not recognized. Please try again.";
+                        showStatus("Face did not match. Please try again.", "error");
                     }
                 } else {
-                    statusText.innerText = "Error: " + result.message;
+                    showStatus("Error: " + result.message, "error");
                 }
             } catch (error) {
-                statusText.innerText = "Request failed: " + error.message;
+                showStatus("Request failed: " + error.message, "error");
             }
         });
+
+        function showStatus(message, type) {
+            statusText.innerText = message;
+            statusText.className = "";
+            if (type === "success") statusText.classList.add("success");
+            else if (type === "error") statusText.classList.add("error");
+        }
     </script>
 </body>
 </html>

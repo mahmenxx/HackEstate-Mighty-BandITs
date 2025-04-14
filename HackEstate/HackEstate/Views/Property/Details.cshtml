@@ -60,6 +60,9 @@
                             <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
                                 Connect with Agent
                             </button>
+                            <button type="button" class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#viewMessagesModal">
+                                💬 View Messages
+                            </button>
 
                         }
                         else
@@ -134,6 +137,36 @@
         </div>
     </div>
 }
+
+@if (ViewBag.ChatMessages != null)
+{
+    <div class="modal fade" id="viewMessagesModal" tabindex="-1" aria-labelledby="viewMessagesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="viewMessagesModalLabel">Message History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                    @foreach (var msg in ViewBag.ChatMessages as List<ChatMessage>)
+                    {
+                        var isMe = msg.FromUserId.ToString() == userId;
+                        <div class="d-flex @(isMe ? "justify-content-end" : "justify-content-start") mb-2">
+                            <div class="p-2 rounded text-white" style="max-width: 75%; background-color:@(isMe ? "#4CAF50" : "#6c757d")">
+                                <small><strong>@msg.FromUser?.FirstName</strong></small><br />
+                                @msg.Message
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <script>
     function findAgentAI(propertyId) {
         // This can call a backend endpoint or show a loading modal

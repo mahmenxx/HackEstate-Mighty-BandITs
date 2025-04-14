@@ -60,11 +60,19 @@ public partial class HackEstateDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FromUserId).HasColumnName("from_user_id");
             entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.PropertyId).HasColumnName("property_id");
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime")
+                .HasColumnName("timestamp");
             entity.Property(e => e.ToUserId).HasColumnName("to_user_id");
 
             entity.HasOne(d => d.FromUser).WithMany(p => p.ChatMessageFromUsers)
                 .HasForeignKey(d => d.FromUserId)
                 .HasConstraintName("FK_ChatMessage_User");
+
+            entity.HasOne(d => d.Property).WithMany(p => p.ChatMessages)
+                .HasForeignKey(d => d.PropertyId)
+                .HasConstraintName("FK_ChatMessage_Property");
 
             entity.HasOne(d => d.ToUser).WithMany(p => p.ChatMessageToUsers)
                 .HasForeignKey(d => d.ToUserId)

@@ -59,7 +59,11 @@ public class FaceComparisonController : BaseController
             int faces = await DetectNumberOfFaces(compressedCapturedImageBase64);
 
             double confidence = result["confidence"]?.ToObject<double>() ?? 0;
-
+            if (confidence >= 70)
+            {
+                // ✅ Set session as verified
+                HttpContext.Session.SetString("IsFaceVerified", "true");
+            }
             return Json(new { success = true, data = new { confidence }, noOfFaces = faces });
         }
         catch (Exception ex)

@@ -1,9 +1,51 @@
-﻿@{
+﻿@model List<HackEstate.Models.User>
+
+@{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var roleId = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 }
 
+<br/>
+<br/>
 <br />
 <br />
-<br />
-<br />
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Our Verified Agents</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var agent in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow border-0">
+                    @if (!string.IsNullOrEmpty(agent.IdentificationCardUrl))
+                    {
+                        <img src="@Url.Content("~/" + agent.IdentificationCardUrl)" class="card-img-top" alt="Agent ID" style="object-fit: cover; height: 200px;" />
+                    }
+                    else
+                    {
+                        <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span>No ID Image</span>
+                        </div>
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@($"{agent.FirstName} {agent.LastName}")</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> @agent.Email<br />
+                            <strong>Contact:</strong> @agent.Contact<br />
+                            <strong>Address:</strong> @agent.Address<br />
+                            @if (!string.IsNullOrEmpty(agent.Description))
+                            {
+                                <strong>Description:</strong> @agent.Description
+                            }
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-transparent border-0 text-end">
+                        <a href="@Url.Action("Profile", "User", new { id = agent.Id })" class="btn btn-outline-primary btn-sm">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

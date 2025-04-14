@@ -53,7 +53,7 @@ app.UseRouting();
 
 app.UseAuthentication();  // Add authentication middleware
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Dashboard}/{id?}");

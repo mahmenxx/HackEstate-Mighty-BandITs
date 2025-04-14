@@ -65,15 +65,22 @@ namespace HackEstate.Controllers
 
             if (validLogin != null)
             {
-                await this._signInManager.SignInAsync(validLogin);
+                if(validLogin.RoleId == 5)
+                {
+                    await this._signInManager.SignInAsync(validLogin);
+                    return RedirectToAction("Dashboard", "Admin");
+                }
                 if (validLogin.Status.Equals("INACTIVE") && validLogin.RoleId != 1)
                 {
+                    await this._signInManager.SignInAsync(validLogin);
                     return RedirectToAction("IntroQuiz", "Home");
                 }
                 if (validLogin.IdentificationCardUrl != null && validLogin.RoleId == 1)
                 {
+                    await this._signInManager.SignInAsync(validLogin);
                     return RedirectToAction("VerifyAgent", "Home");
                 }
+                await this._signInManager.SignInAsync(validLogin);
                 return RedirectToAction("Dashboard", "Home");
             }
             else
@@ -116,6 +123,7 @@ namespace HackEstate.Controllers
         public async Task<IActionResult> Logout()
         {
             await this._signInManager.SignOutAsync();
+            HttpContext.Session.Remove("IsFaceVerified");
             return RedirectToAction("Login", "Account");
         }
     }

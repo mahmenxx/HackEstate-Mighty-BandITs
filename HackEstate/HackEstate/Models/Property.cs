@@ -31,6 +31,8 @@ public partial class Property
 
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
+    public virtual ICollection<ChatMessage> ChatMessages { get; set; } = new List<ChatMessage>();
+
     public virtual ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();
 
     public virtual User? User { get; set; }

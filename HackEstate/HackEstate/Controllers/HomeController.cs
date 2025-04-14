@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace HackEstate.Controllers
@@ -90,6 +91,15 @@ namespace HackEstate.Controllers
                 var user = _userRepo.Get(userId);
 
                 var userAnswer = _userQuizAnswerRepo.Table.Where(m => m.UserId == userId).FirstOrDefault();
+                if(user.RoleId == 1)
+                {
+                    string isVerified = HttpContext.Session.GetString("IsFaceVerified");
+
+                    if (string.IsNullOrEmpty(isVerified) || isVerified != "true")
+                    {
+                        return RedirectToAction("VerifyAgent", "Home");
+                    }
+                }
                 if (userAnswer == null)
                 {
                 }
@@ -97,6 +107,17 @@ namespace HackEstate.Controllers
                 {
                     ViewBag.Agents = await AgentsRecommendedByAi(userAnswer, user);
                 }
+
+                var messages = _chatMessageRepo.Table
+                    .Where(m => m.FromUserId == userId || m.ToUserId == userId)
+                    .ToList();
+
+                var chattedUsers = messages
+                    .Select(m => m.FromUserId == userId ? m.ToUser : m.FromUser)
+                    .DistinctBy(u => u.Id) // Requires System.Linq for .DistinctBy
+                    .ToList();
+
+                ViewBag.ChattedUsers = chattedUsers; 
                 return View();
             }
             return RedirectToAction("Login", "Account");
@@ -115,6 +136,7 @@ namespace HackEstate.Controllers
 
                 ViewBag.YourProperties = yourProperties;
             }
+
             return View();
         }
 
@@ -262,7 +284,8 @@ namespace HackEstate.Controllers
         [Authorize]
         public IActionResult Agents()
         {
-            return View();
+            var agents = _userRepo.Table.Where(m => m.RoleId == 1).ToList();
+            return View(agents);
         }
 
         public IActionResult Events()
@@ -274,5 +297,60 @@ namespace HackEstate.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            int userId = int.Parse(User.FindFirst("UserId")?.Value);
+
+            var user = _userRepo.Get(userId);
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(User model, IFormFile IdentificationCardFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _userRepo.Get(model.Id);
+
+                if (user == null)
+                    return NotFound();
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Username = model.Username;
+                user.Email = model.Email;
+                user.Contact = model.Contact;
+                user.Address = model.Address;
+                user.Description = model.Description;
+
+                // Handle ID image upload
+                if (IdentificationCardFile != null && IdentificationCardFile.Length > 0)
+                {
+                    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Attachments", "IdentificationCards");
+                    if (!Directory.Exists(folderPath))
+                        Directory.CreateDirectory(folderPath);
+
+                    var fileName = Guid.NewGuid() + Path.GetExtension(IdentificationCardFile.FileName);
+                    var filePath = Path.Combine(folderPath, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await IdentificationCardFile.CopyToAsync(stream);
+                    }
+
+                    // Save the relative path (e.g., Attachments/IdentificationCards/filename.jpg)
+                    user.IdentificationCardUrl = Path.Combine("Attachments", "IdentificationCards", fileName).Replace("\\", "/");
+                }
+
+                _userRepo.Update(user.Id, user);
+                TempData["Success"] = "Profile updated successfully!";
+                return RedirectToAction("Profile");
+            }
+
+            return View("Profile", model);
+        }
+
     }
 }
