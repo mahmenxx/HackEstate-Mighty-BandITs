@@ -81,14 +81,14 @@ namespace HackEstate.Authentication
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String, "projectgreen"),
-                new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, "projectgreen"),
+                new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String, "hackestate"),
+                new Claim(ClaimTypes.Name, name, ClaimValueTypes.String, "hackestate"),
 
-                new Claim("UserId", userId, ClaimValueTypes.String, "projectgreen"),
-                new Claim("UserName", name, ClaimValueTypes.String, "projectgreen")
+                new Claim("UserId", userId, ClaimValueTypes.String, "hackestate"),
+                new Claim("UserName", name, ClaimValueTypes.String, "hackestate")
 
             };
-            return new ClaimsIdentity(claims, "projectgreen");
+            return new ClaimsIdentity(claims, "hackestate");
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace HackEstate.Authentication
             await _httpContextAccessor
                 .HttpContext
                 .SignInAsync(
-                            "projectgreen",
+                            "hackestate",
                             (ClaimsPrincipal)principal,
                             new AuthenticationProperties
                             {
