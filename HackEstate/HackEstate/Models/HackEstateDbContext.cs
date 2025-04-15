@@ -31,6 +31,8 @@ public partial class HackEstateDbContext : DbContext
 
     public virtual DbSet<UserQuizAnswer> UserQuizAnswers { get; set; }
 
+    public virtual DbSet<UserSeminarCertification> UserSeminarCertifications { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server=JULES-IRWIN\\SQLEXPRESS;Database=HackEstateDB;Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True");
@@ -165,6 +167,10 @@ public partial class HackEstateDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("firstName");
             entity.Property(e => e.IdentificationCardUrl).HasColumnName("identificationCardURL");
+            entity.Property(e => e.IsVerified)
+                .HasMaxLength(50)
+                .HasDefaultValue("FALSE")
+                .HasColumnName("isVerified");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .HasColumnName("lastName");
@@ -210,6 +216,22 @@ public partial class HackEstateDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserQuizAnswers)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_UserQuizAnswer_User");
+        });
+
+        modelBuilder.Entity<UserSeminarCertification>(entity =>
+        {
+            entity.ToTable("UserSeminarCertification");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ImageUrl).HasColumnName("imageURL");
+            entity.Property(e => e.Type)
+                .HasMaxLength(50)
+                .HasColumnName("type");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserSeminarCertifications)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserSeminarCertification_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

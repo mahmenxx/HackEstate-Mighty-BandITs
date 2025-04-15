@@ -65,7 +65,7 @@ namespace HackEstate.Controllers
                 var newAnswer = new UserQuizAnswer()
                 {
                     UserId = user.Id,
-                    WhenToBuy =  Seller_Timeline,
+                    WhenToBuy = Seller_Timeline,
                     TypeOfProperty = Seller_PropertyType,
                     MostImportantInAgent = AgentPreference,
                     PreferredLocation = Seller_Location,
@@ -91,7 +91,7 @@ namespace HackEstate.Controllers
                 var user = _userRepo.Get(userId);
 
                 var userAnswer = _userQuizAnswerRepo.Table.Where(m => m.UserId == userId).FirstOrDefault();
-                if(user.RoleId == 1)
+                if (user.RoleId == 1)
                 {
                     string isVerified = HttpContext.Session.GetString("IsFaceVerified");
 
@@ -117,7 +117,7 @@ namespace HackEstate.Controllers
                     .DistinctBy(u => u.Id) // Requires System.Linq for .DistinctBy
                     .ToList();
 
-                ViewBag.ChattedUsers = chattedUsers; 
+                ViewBag.ChattedUsers = chattedUsers;
                 return View();
             }
             return RedirectToAction("Login", "Account");
@@ -133,6 +133,12 @@ namespace HackEstate.Controllers
             if (user.RoleId == 3)
             {
                 var yourProperties = _agentPropertyRepo.Table.Where(m => m.Property.UserId == userId).ToList();
+
+                ViewBag.YourProperties = yourProperties;
+            }
+            if (user.RoleId == 1)
+            {
+                var yourProperties = _agentPropertyRepo.Table.Where(m => m.AgentId == userId).ToList();
 
                 ViewBag.YourProperties = yourProperties;
             }
@@ -185,7 +191,7 @@ namespace HackEstate.Controllers
                 string agentsJson = JsonConvert.SerializeObject(agentsDTO);
 
                 string input = $"User's Answers: {answerJson},\nUser: {userJson},\nList of Agents: {agentsJson}";
-    
+
                 using (var client = new HttpClient())
                 {
                     var values = new Dictionary<string, string>
@@ -196,7 +202,7 @@ namespace HackEstate.Controllers
                     var content = new FormUrlEncodedContent(values);
 
                     // Post the request to your Gemini model API endpoint
-                    var response = await client.PostAsync("http://127.0.0.1:5000/assignAgent", content);
+                    var response = await client.PostAsync("https://divine-booking-456823-t4.et.r.appspot.com/assignAgent", content);
                     response.EnsureSuccessStatusCode();
 
                     // Read the API response
@@ -236,6 +242,7 @@ namespace HackEstate.Controllers
             }
         }
 
+        
 
         [Authorize]
         [HttpPost]
@@ -304,6 +311,26 @@ namespace HackEstate.Controllers
             int userId = int.Parse(User.FindFirst("UserId")?.Value);
 
             var user = _userRepo.Get(userId);
+//            var users = new List<User>
+//{
+//    new User { Username = "agent_john", Email = "john.agent@example.com", RoleId = 1, FirstName = "John", LastName = "Doe", Address = "123 Makati Ave", Contact = "09171234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "buyer_anna", Email = "anna.buyer@example.com", RoleId = 2, FirstName = "Anna", LastName = "Reyes", Address = "456 Taguig St", Contact = "09181234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "seller_mike", Email = "mike.seller@example.com", RoleId = 3, FirstName = "Mike", LastName = "Santos", Address = "789 Pasig Blvd", Contact = "09191234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "agent_rose", Email = "rose.agent@example.com", RoleId = 1, FirstName = "Rose", LastName = "Cruz", Address = "Greenhills, San Juan", Contact = "09201234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "buyer_luis", Email = "luis.buyer@example.com", RoleId = 2, FirstName = "Luis", LastName = "Lopez", Address = "QC, Commonwealth", Contact = "09211234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "seller_emma", Email = "emma.seller@example.com", RoleId = 3, FirstName = "Emma", LastName = "Dela Cruz", Address = "Ortigas Center", Contact = "09221234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "agent_kyle", Email = "kyle.agent@example.com", RoleId = 1, FirstName = "Kyle", LastName = "Garcia", Address = "BGC, Taguig", Contact = "09231234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "buyer_ivy", Email = "ivy.buyer@example.com", RoleId = 2, FirstName = "Ivy", LastName = "Morales", Address = "Alabang, Muntinlupa", Contact = "09241234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "seller_nico", Email = "nico.seller@example.com", RoleId = 3, FirstName = "Nico", LastName = "Fernandez", Address = "Las Piñas", Contact = "09251234567", Password = "Password123!", Status = "Active" },
+//    new User { Username = "agent_bea", Email = "bea.agent@example.com", RoleId = 1, FirstName = "Bea", LastName = "Navarro", Address = "Marikina", Contact = "09261234567", Password = "Password123!", Status = "Active" }
+//};
+
+//            // Insert all to the database
+//            foreach (var user1 in users)
+//            {
+//                _userRepo.Create(user1);
+//            }
+
             return View(user);
         }
 
@@ -352,5 +379,11 @@ namespace HackEstate.Controllers
             return View("Profile", model);
         }
 
+
+        [AllowAnonymous]
+        public IActionResult Landing()
+        {
+            return View();
+        }
     }
 }

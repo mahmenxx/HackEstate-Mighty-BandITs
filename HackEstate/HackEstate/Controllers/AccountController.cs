@@ -91,14 +91,12 @@ namespace HackEstate.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public IActionResult Register(string FirstName, string LastName, string Email, string ContactNo, string Username, string Password, string Address, int Role)
         {
             var newUser = new User()

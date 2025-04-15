@@ -5,6 +5,12 @@
     var isOwner = userId == Model.User?.Id.ToString();
 
     var agentProperty = ViewBag.AgentProperty as AgentProperty;
+    var isAgent = agentProperty.AgentId == int.Parse(userId.ToString());
+    var roleId = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+
+    bool isSold = ViewBag.IsSold != null && (bool)ViewBag.IsSold;
+
 }
 <br />
 <br />
@@ -15,13 +21,36 @@
     <div class="row">
         <div class="col-md-8">
             <h2>@Model.Title</h2>
-            <img src="https://via.placeholder.com/800x400?text=Property+Image" class="img-fluid mb-3" alt="Property Image" />
+            @if (Model.PropertyImages != null && Model.PropertyImages.Any())
+            {
+                @foreach (var image in Model.PropertyImages)
+                {
+                    <img src="@Url.Content("~/" + image.ImageUrl)"
+                         class="img-thumbnail"
+                         alt="Property Image"
+                         style="width: 200px; height: 150px; object-fit: cover;"
+                         onerror="this.onerror=null; this.src='/default-img.jpg';" />
+                }
+            }
+            else
+            {
+                <img src="/default-img.jpg"
+                     class="img-fluid mb-3"
+                     alt="Default Property Image" />
+            }
+            <div class="mt-3">
+                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#arViewerModal">
+                    📱 View Property in AR
+                </button>
+            </div>
+
             <p><strong>Location:</strong> @Model.Location</p>
             <p><strong>Price:</strong> ₱@String.Format("{0:N0}", Model.Price)</p>
             <p><strong>Bedrooms:</strong> @Model.BedroomQty</p>
             <p><strong>Bathrooms:</strong> @Model.BathroomQty</p>
             <p><strong>Description:</strong> @Model.Description</p>
             <p><strong>Property Type:</strong> @Model.PropertyType</p>
+            <p><strong>ECO SCORE (AI):</strong> @ViewBag.EcoScore</p>
 
             @if (isOwner)
             {
@@ -32,7 +61,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    @if (!isOwner)
+                    @if (!isOwner && !isAgent)
                     {
                         if (agentProperty != null)
                         {
@@ -41,11 +70,29 @@
                             <p><strong>Email:</strong> @agentProperty.Agent.Email</p>
                             <p><strong>Phone:</strong> @agentProperty.Agent.Contact</p>
 
-                      <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
-    Connect with Agent
-</button>
+                            <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
+                                Connect with Agent
+                            </button>
+                            if (roleId == "2") // or if you expose RoleId in ViewBag or model
+                            {
+                                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#rentPropertyModal">🏠 Rent this Property</button>
+                            }
 
                         }
+                    }
+                    else if (isAgent)
+                    {
+                        <h5 class="card-title">Agent Information</h5>
+                        <p><strong>Name:</strong> @agentProperty.Agent.FirstName</p>
+                        <p><strong>Email:</strong> @agentProperty.Agent.Email</p>
+                        <p><strong>Phone:</strong> @agentProperty.Agent.Contact</p>
+
+                        <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#contactAgentModal">
+                            Connect with Client
+                        </button>
+                        <button type="button" class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#viewMessagesModal">
+                            💬 View Messages
+                        </button>
                     }
                     else
                     {
@@ -67,6 +114,7 @@
                         }
                         else
                         {
+                            <br />
                             <h5 class="card-title">This property is not currently handled by an agent.</h5>
                             <button class="btn btn-outline-secondary w-100 mt-3" onclick="findAgentAI(@Model.Id)">
                                 🤖 Find Agent through AI
@@ -80,7 +128,7 @@
 </div>
 
 <!-- Modal for contacting agent -->
-@if (!isOwner && agentProperty != null)
+@if (!isOwner && !isAgent && agentProperty != null)
 {
     <div class="modal fade" id="contactAgentModal" tabindex="-1" aria-labelledby="contactAgentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -93,6 +141,7 @@
                     <div class="modal-body">
                         <input type="hidden" name="agentId" value="@agentProperty.Agent.Id" />
                         <input type="hidden" name="propertyId" value="@Model.Id" />
+                        <input type="hidden" name="toUserId" value="@agentProperty.Agent.Id" />
 
                         <div class="mb-3">
                             <label for="message" class="form-label">Your Message</label>
@@ -108,6 +157,35 @@
         </div>
     </div>
 }
+
+<!-- Rent Property Modal -->
+<div class="modal fade" id="rentPropertyModal" tabindex="-1" aria-labelledby="rentPropertyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="rentPropertyModalLabel">Rent this Property</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Rental Summary:</strong></p>
+                <ul>
+                    <li><strong>Property:</strong> @Model.Title</li>
+                    <li><strong>Location:</strong> @Model.Location</li>
+                    <li><strong>Monthly Rate:</strong> ₱@String.Format("{0:N0}", Model.Price)</li>
+                    <li><strong>Rental Term:</strong> 12 months</li>
+                </ul>
+                <hr />
+                <p class="text-success text-center">
+                    🎉 You have successfully initiated the rental process! <br />
+                    An agent will contact you shortly to finalize the agreement.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success w-100" data-bs-dismiss="modal">Got it! 👍</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if (isOwner && agentProperty != null)
 {
@@ -138,34 +216,132 @@
     </div>
 }
 
+@if (isAgent)
+{
+    <div class="modal fade" id="contactAgentModal" tabindex="-1" aria-labelledby="contactAgentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="@Url.Action("SendMessage", "Property")">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactAgentModalLabel">Send Message to your Client</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="agentId" value="@agentProperty.Property.User.Id" />
+                        <input type="hidden" name="propertyId" value="@Model.Id" />
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Hi, client. There are updates regarding.."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
 @if (ViewBag.ChatMessages != null)
 {
     <div class="modal fade" id="viewMessagesModal" tabindex="-1" aria-labelledby="viewMessagesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="viewMessagesModalLabel">Message History</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                    @foreach (var msg in ViewBag.ChatMessages as List<ChatMessage>)
-                    {
-                        var isMe = msg.FromUserId.ToString() == userId;
-                        <div class="d-flex @(isMe ? "justify-content-end" : "justify-content-start") mb-2">
-                            <div class="p-2 rounded text-white" style="max-width: 75%; background-color:@(isMe ? "#4CAF50" : "#6c757d")">
-                                <small><strong>@msg.FromUser?.FirstName</strong></small><br />
-                                @msg.Message
+                <form method="post" action="@Url.Action("SendMessage", "Property")">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="viewMessagesModalLabel">Message History</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                        @foreach (var msg in ViewBag.ChatMessages as List<ChatMessage>)
+                        {
+                            var isMe = msg.FromUserId.ToString() == userId;
+                            <div class="d-flex @(isMe ? "justify-content-end" : "justify-content-start") mb-2">
+                                <div class="p-2 rounded text-white" style="max-width: 75%; background-color:@(isMe ? "#4CAF50" : "#6c757d")">
+                                    <small><strong>@msg.FromUser?.FirstName</strong></small><br />
+                                    @msg.Message
+                                </div>
                             </div>
+                        }
+
+                        <hr />
+                        <input type="hidden" name="propertyId" value="@Model.Id" />
+                        @if (isAgent)
+                        {
+                            <input type="hidden" name="toUserId" value="@Model.UserId" />
+                        }
+                        else
+                        {
+                            <input type="hidden" name="toUserId" value="@Model.AgentProperties.FirstOrDefault().Agent.Id" />
+                        }
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Send a Message</label>
+                            <textarea class="form-control" name="message" id="message" rows="4" placeholder="Type your message here..."></textarea>
                         </div>
-                    }
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 }
+<p>
+    <strong>Status:</strong>
+    <span class="badge bg-success style="color: white !important;>
+        Sold
+    </span>
+</p>
+@if (!isOwner && !isAgent)
+{
+<div class="d-flex flex-wrap gap-2 mt-3">
+    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#scheduleVisitModal">📅 Schedule a Visit</button>
+    <button class="btn btn-outline-danger">⚠️ Report this Property</button>
+    <button class="btn btn-outline-warning">⭐ Add to Favorites</button>
+</div>
+}
+@if (isOwner)
+{
+<form method="post" action="@Url.Action("MarkAsSold", "Property")" class="mt-3">
+    <input type="hidden" name="propertyId" value="@Model.Id" />
+    @if (!ViewBag.IsSold)
+    {
+    <button type="submit" class="btn btn-danger">✅ Mark as Sold</button>
+    }
+    else
+    {
+    <span class="text-success">This property is already marked as sold.</span>
+    }
+</form>
+}
+
+<!-- Static AR Viewer Modal -->
+<div class="modal fade" id="arViewerModal" tabindex="-1" aria-labelledby="arViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="arViewerModalLabel">AR Property Preview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-0" style="height: 500px;">
+                <!-- Static AR simulation using an iframe or 3D model viewer -->
+                <iframe src="https://mywebar.com/p/Project_0_jsyj7u949" frameborder="0" scrolling="yes" seamless="seamless"
+                        style="display:block; width:100%; height:100%;"
+                        allow="camera;gyroscope;accelerometer;magnetometer;xr-spatial-tracking;microphone;">
+                </iframe>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function findAgentAI(propertyId) {

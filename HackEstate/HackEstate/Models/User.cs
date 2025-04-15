@@ -29,6 +29,8 @@ public partial class User
 
     public string? Description { get; set; }
 
+    public string? IsVerified { get; set; }
+
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
     public virtual ICollection<ChatMessage> ChatMessageFromUsers { get; set; } = new List<ChatMessage>();
@@ -42,4 +44,6 @@ public partial class User
     public virtual Role? Role { get; set; }
 
     public virtual ICollection<UserQuizAnswer> UserQuizAnswers { get; set; } = new List<UserQuizAnswer>();
+
+    public virtual ICollection<UserSeminarCertification> UserSeminarCertifications { get; set; } = new List<UserSeminarCertification>();
 }

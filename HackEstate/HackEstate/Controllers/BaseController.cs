@@ -7,7 +7,7 @@ namespace HackEstate.Controllers
 {
     public class BaseController : Controller
     {
-        public HackEstateDbContext _db;
+        public DbAb7a0dHackestatedbContext _db;
         public BaseRepository<User> _userRepo;
         public BaseRepository<Property> _propertyRepo;
         public BaseRepository<AgentProperty> _agentPropertyRepo;
@@ -21,7 +21,7 @@ namespace HackEstate.Controllers
         protected ISession _session => _httpContextAccessor.HttpContext.Session;
         public BaseController()
         {
-            _db = new HackEstateDbContext();
+            _db = new DbAb7a0dHackestatedbContext();
             _userRepo = new BaseRepository<User>();
             _propertyRepo = new BaseRepository<Property>();
             _agentPropertyRepo = new BaseRepository<AgentProperty>();

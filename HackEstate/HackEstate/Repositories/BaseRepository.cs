@@ -16,7 +16,7 @@ namespace HackEstate.Repositories
         public DbSet<T> Table { get { return _table; } }
         public BaseRepository()
         {
-            _db = new HackEstateDbContext();
+            _db = new DbAb7a0dHackestatedbContext();
             _table = _db.Set<T>();
         }
         public T Get(object id)

@@ -2,8 +2,321 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var roleId = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 }
+<style>
+    #chat-button {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: #FF6553;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        z-index: 999;
+    }
 
-<br />
-<br />
-<br />
-<br />
+    #chat-container {
+        position: fixed;
+        bottom: 100px;
+        left: 30px;
+        width: 350px;
+        height: 500px;
+        display: none;
+        flex-direction: column;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 998;
+        transition: all 0.3s ease;
+    }
+
+    #chatacular-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+</style>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="~/images/Logo.png" alt="EventTahan Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/events">Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-signin" href="/login">Sign In</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Discover Amazing Events Around You</h1>
+        <p>Join thousands of people experiencing the best events in your city!</p>
+        <a href="#trending-events" class="btn btn-explore">Explore Events</a>
+    </div>
+</section>
+
+<!-- Search Bar -->
+<section class="search-section container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search events or locations..." onkeyup="searchEvents()">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trending Events Near You -->
+<section id="trending-events" class="container my-5">
+    <h2 class="section-title">Trending Events Near You</h2>
+    <div class="row" id="trending-events-list">
+        <div class="col-md-4 mb-4">
+            <div class="event-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5D4AcTmopJg-wlE7v0yUVkyBT-Z9Ipv3u_Q&s" class="card-img-top" alt="Music Festival">
+                <div class="card-body">
+                    <h5 class="card-title">Summer Music Festival</h5>
+                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>San Francisco, CA</p>
+                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 20, 2025</p>
+                    <a href="#" class="btn">Get Tickets</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="event-card">
+                <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1" class="card-img-top" alt="Tech Conference">
+                <div class="card-body">
+                    <h5 class="card-title">Tech Innovate 2025</h5>
+                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>New York, NY</p>
+                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 25, 2025</p>
+                    <a asp-controller="Test" asp-action="ViewEvent" class="btn">View Event</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="event-card">
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205" class="card-img-top" alt="Food Festival">
+                <div class="card-body">
+                    <h5 class="card-title">Taste of the City</h5>
+                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Los Angeles, CA</p>
+                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 22, 2025</p>
+                    <a href="#" class="btn">Get Tickets</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Events by Category -->
+<section class="container my-5">
+    <h2 class="section-title">Events by Category</h2>
+
+    <!-- Music Category -->
+    <div class="category-carousel mb-5">
+        <h3 class="mb-3">Music</h3>
+        <div id="musicCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHfMDgDy2RqEOuqEAGTXuytddmPp9ZuDzkyw&s" class="card-img-top" alt="Concert">
+                                <div class="card-body">
+                                    <h5 class="card-title">Rock Night Concert</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Chicago, IL</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 28, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063" class="card-img-top" alt="Jazz Night">
+                                <div class="card-body">
+                                    <h5 class="card-title">Jazz Night</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Seattle, WA</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 30, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdofcWJvtZ71Sh56OQs8x_BNOrIsJbBZ-CBQ&s" class="card-img-top" alt="Pop Festival">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pop Festival</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Miami, FL</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 2, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more carousel items if needed -->
+            </div>
+       @*      <button class="carousel-control-prev" type="button" data-bs-target="#musicCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#musicCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button> *@
+        </div>
+    </div>
+
+    <!-- Sports Category -->
+    <div class="category-carousel mb-5">
+        <h3 class="mb-3">Sports</h3>
+        <div id="sportsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://images.unsplash.com/photo-1509023464722-18d996393ca8" class="card-img-top" alt="Marathon">
+                                <div class="card-body">
+                                    <h5 class="card-title">City Marathon</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Boston, MA</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>April 29, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPAWONubqNvi30LIRJ0_GVEUKrChHCC0Y6Qw&s" class="card-img-top" alt="Soccer Match">
+                                <div class="card-body">
+                                    <h5 class="card-title">Soccer Finals</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Atlanta, GA</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 1, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiuT2vQPs4ANQfAFiTh4gEKKpfYcnCuVFq4Q&s" class="card-img-top" alt="Basketball Game">
+                                <div class="card-body">
+                                    <h5 class="card-title">Basketball Playoffs</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Denver, CO</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 3, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          @*   <button class="carousel-control-prev" type="button" data-bs-target="#sportsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#sportsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button> *@
+        </div>
+    </div>
+
+    <!-- Tech Category -->
+    <div class="category-carousel mb-5">
+        <h3 class="mb-3">Tech</h3>
+        <div id="techCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" class="card-img-top" alt="AI Summit">
+                                <div class="card-body">
+                                    <h5 class="card-title">AI Summit 2025</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>San Jose, CA</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 5, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://images.unsplash.com/photo-1544198365-f5d60b6d8190" class="card-img-top" alt="Startup Expo">
+                                <div class="card-body">
+                                    <h5 class="card-title">Startup Expo</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Austin, TX</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 7, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="event-card">
+                                <img src="https://fintechlabs.com/wp-content/uploads/2025/02/cybersecurity--1280x640.jpeg" class="card-img-top" alt="Cybersecurity Conf">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cybersecurity Conf</h5>
+                                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Las Vegas, NV</p>
+                                    <p class="card-text"><i class="fas fa-calendar-alt me-2"></i>May 9, 2025</p>
+                                    <a href="#" class="btn">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       @*      <button class="carousel-control-prev" type="button" data-bs-target="#techCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#techCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button> *@
+        </div>
+    </div>
+</section>
+<!-- Floating Chat Button -->
+<div id="chat-button" onclick="toggleChat()">
+    💬
+</div>
+
+
+<!-- Chat Window -->
+<div id="chat-container">
+    <iframe src="https://cdn.scaledrone.com/chatacular/index.html?id=aI2hFuy9f8vJAB1G&color=38a47a" id="chatacular-iframe"></iframe>
+</div>
+
+<script>
+    function toggleChat() {
+        const chatContainer = document.getElementById("chat-container");
+        chatContainer.style.display = chatContainer.style.display === "flex" ? "none" : "flex";
+    }
+</script>

@@ -37,6 +37,22 @@ modelAIAgent = genai.GenerativeModel(
     """
 )
 
+modelEcoScore = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    system_instruction="""
+    You are going to evaluate property details provided by a seller or buyer in a real estate scenario.
+
+    Based on the property details alone, assign a score from 0 to 100 that reflects the overall quality in eco, green, nature.
+
+    Output only a single numeric score (integer from 0 to 100) on one line. Do not include any explanation, commentary, or text — just the score.
+
+    If the property details are insufficient or unclear, return 0.
+    """
+)
+
+
+
 modelTicket = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
@@ -98,6 +114,20 @@ def chat():
         print(e)
         return jsonify({"success": False, "error": str(e)})
 
+@app.route('/ecoScore', methods=['POST'])
+def ecoScore():
+    try:
+        user_input = request.form.get('input')
+        response_text = process_text_input_eco(user_input)
+        print(user_input)
+        # Ensure response is valid JSON
+        print(response_text)
+        return jsonify({"success": True, "recommendation": response_text})
+    except Exception as e:
+        print(e)
+        return jsonify({"success": False, "error": str(e)})
+
+
 @app.route('/chatReport', methods=['POST'])
 def chatReport():
     try:
@@ -136,6 +166,27 @@ def generate_ticket_summary():
 
 def process_text_input(user_input):
     chat_session = modelAIAgent.start_chat(
+        history=[
+            {
+                "role": "user",
+                "parts": [
+                    "What is AI for you?",
+                ],
+            },
+            {
+                "role": "model",
+                "parts": [
+                    "AI, or Artificial Intelligence, is a fascinating and rapidly evolving field that I, as a large language model, am deeply integrated with. Here's my perspective:\n\n**AI is the ability of machines to perform tasks that typically require human intelligence.** This encompasses a wide range of capabilities, including:\n\n* **Learning:**  AI systems can learn from data, adapting and improving their performance over time. This includes everything from recognizing patterns to understanding complex concepts.\n* **Problem-solving:** AI can tackle problems that are difficult or impossible for humans to solve, often using complex algorithms and heuristics.\n* **Decision-making:** AI can analyze information and make decisions based on that analysis, sometimes even better than humans in specific domains.\n* **Creativity:** While not fully realized yet, AI is showing promise in areas like art, music, and writing, demonstrating the potential for machines to generate creative outputs.\n\n**For me, AI is a tool for enhancing human capabilities.** I am trained on massive datasets, allowing me to process information, generate text, and respond to prompts in ways that are helpful and informative. \n\n**However, it's crucial to remember that AI is not human.** While I can perform many tasks that require intelligence, I lack the emotional intelligence, subjective experiences, and conscious awareness that define human existence.\n\n**The future of AI is incredibly exciting.** As research and development continue, we can expect AI to play an even more significant role in our lives, transforming industries, solving complex problems, and potentially even augmenting our own capabilities.\n\n**But with great power comes great responsibility.** It's essential to develop and deploy AI ethically and responsibly, ensuring it benefits all of humanity and does not exacerbate existing inequalities or create new risks. \n",
+                ],
+            },
+        ]
+    )
+
+    response = chat_session.send_message(user_input)
+    return response.text
+
+def process_text_input_eco(user_input):
+    chat_session = modelEcoScore.start_chat(
         history=[
             {
                 "role": "user",

@@ -8,11 +8,11 @@
 <br />
 <br />
 <div class="container mt-5">
-    @if (roleId == "3")
+    @if (roleId == "3" || roleId == "1")
     {
         <h2 class="mb-4 text-center text-success">🏠 Your Properties</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @if(ViewBag.YourProperties == null)
+            @if (ViewBag.YourProperties == null)
             {
                 <p>You have no active properties. You can create or add one.</p>
             }
@@ -22,7 +22,7 @@
                 {
                     <div class="col">
                         <div class="card shadow-sm h-100">
-                            <img src="https://via.placeholder.com/400x200?text=House+in+BGC" class="card-img-top" alt="Property Image">
+                            <img src="https://via.placeholder.com/400x200?text=House+in+BGC" class="card-img-top" alt="Property Image" onerror="this.onerror=null; this.src='/default-img.jpg';">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">@property.Property.Title</h5>
                                 <p class="card-text">@property.Property.BedroomQty bed · @property.Property.BathroomQty bath · ₱@String.Format("{0:N0}", property.Property.Price)</p>
@@ -42,7 +42,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col">
             <div class="card shadow-sm h-100">
-                <img src="https://via.placeholder.com/400x200?text=House+in+BGC" class="card-img-top" alt="Property Image">
+                <img src="https://via.placeholder.com/400x200?text=House+in+BGC" class="card-img-top" alt="Property Image" onerror="this.onerror=null; this.src='/default-img.jpg'";>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">House in BGC</h5>
                     <p class="card-text">3 bed · 2 bath · ₱15,000,000</p>
@@ -54,7 +54,7 @@
 
         <div class="col">
             <div class="card shadow-sm h-100">
-                <img src="https://via.placeholder.com/400x200?text=Condo+in+Makati" class="card-img-top" alt="Property Image">
+                <img src="https://via.placeholder.com/400x200?text=Condo+in+Makati" class="card-img-top" alt="Property Image" onerror="this.onerror=null; this.src='/default-img.jpg'";>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Condo in Makati</h5>
                     <p class="card-text">1 bed · 1 bath · ₱6,500,000</p>
@@ -66,7 +66,7 @@
 
         <div class="col">
             <div class="card shadow-sm h-100">
-                <img src="https://via.placeholder.com/400x200?text=Lot+in+Laguna" class="card-img-top" alt="Property Image">
+                <img src="https://via.placeholder.com/400x200?text=Lot+in+Laguna" class="card-img-top" alt="Property Image" onerror="this.onerror=null; this.src='/default-img.jpg'";>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Lot in Laguna</h5>
                     <p class="card-text">300 sqm · ₱2,000,000</p>
@@ -78,6 +78,8 @@
     </div>
 
 </div>
+<h2 class="text-center text-success mt-5 mb-3">📍 Map of Featured Properties in Cebu</h2>
+<div id="map" style="height: 500px;" class="rounded shadow-sm mb-5"></div>
 
 @if (roleId == "3")
 {
@@ -147,3 +149,47 @@
 
 
 }
+<script>
+    function initMap() {
+        const centerCebu = { lat: 10.3157, lng: 123.8854 };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: centerCebu,
+        });
+
+        const markers = [
+            {
+                position: { lat: 10.3173, lng: 123.9058 },
+                title: "Modern Condo in IT Park",
+                link: "/Property/Details/1"
+            },
+            {
+                position: { lat: 10.3091, lng: 123.8935 },
+                title: "Beach House in Mactan",
+                link: "/Property/Details/1"
+            }
+        ];
+
+        markers.forEach(markerData => {
+            const marker = new google.maps.Marker({
+                position: markerData.position,
+                map: map,
+                title: markerData.title
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<div><strong>${markerData.title}</strong><br/>
+                              <a href="${markerData.link}" class="btn btn-sm btn-success mt-2">View Property</a></div>`
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+</script>
+
+<!-- Load Google Maps API -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASwYoSfheLmZpLoq1f6Fi_-wWhjoBb3jw&callback=initMap">
+</script>

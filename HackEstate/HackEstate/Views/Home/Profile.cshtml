@@ -77,9 +77,180 @@
                             <button type="submit" class="btn btn-success">Update Profile</button>
                         </div>
                     </form>
+
+                    @if (Model.RoleId == 1 && (Model.IsVerified== null || Model.IsVerified.ToLower() == "false"))
+                    {
+                    <div class="text-center mt-4">
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#agentVerifyModal">
+                            Verify as Agent
+                        </button>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="agentVerifyModal" tabindex="-1" aria-labelledby="agentVerifyModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content shadow">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title">Agent Verification Steps</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <ol class="list-group list-group-numbered mb-4">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Step 1: Registered on Platform
+                                            <span class="badge bg-success rounded-pill">✓</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Step 2: Uploaded Valid ID
+                                            @if (!string.IsNullOrEmpty(Model.IdentificationCardUrl))
+                                            {
+                                                <span class="badge bg-success rounded-pill">✓</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger rounded-pill">✗</span>
+                                            }
+                                        </li>
+                                            <li class="list-group-item">
+                                                <div class="mb-2">
+                                                    <strong>Step 3: Upload DHSUD License</strong>
+                                                </div>
+
+                                                <!-- Agreement Notice -->
+                                                <div class="form-check mb-2">
+                                                    <a href="https://lawphil.net/statutes/repacts/ra2009/ra_9646_2009.html"
+                                                       class="text-decoration-underline"
+                                                       target="_blank"
+                                                       onclick="markAgreementRead()">
+                                                        📖 Please read RA 9646 (Real Estate Service Act)
+                                                    </a>
+                                                </div>
+
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="agreementCheckbox" disabled>
+                                                    <label class="form-check-label" for="agreementCheckbox">
+                                                        I confirm that I have read the RA 9646 agreement
+                                                    </label>
+                                                </div>
+
+                                                <form id="dhsudForm">
+                                                    <div class="input-group mb-2">
+                                                        <input type="file" class="form-control" id="dhsudFile" required disabled accept="image/png, image/jpeg, image/jpg" />
+                                                        <button type="submit" class="btn btn-outline-primary" id="submitDhsudBtn" disabled>Submit</button>
+                                                    </div>
+                                                    <div id="loader" class="d-none text-center mt-2">
+                                                        <div class="spinner-border text-primary" role="status"></div>
+                                                        <p class="mt-2">Approving license...</p>
+                                                    </div>
+                                                    <div id="step3Approved" class="alert alert-success d-none mt-2" role="alert">
+                                                        ✓ DHSUD License Approved
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        <li class="list-group-item">
+                                            <div class="mb-2">
+                                                <strong>Step 4: Join a Team or Agency</strong>
+                                            </div>
+                                            <div class="mb-2">
+                                                <a href="https://your-agency-directory-link.com" target="_blank" class="btn btn-outline-success mb-2">
+                                                    Join Existing Agency
+                                                </a>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Or enter invite link here..." />
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                            const dhsudForm = document.getElementById("dhsudForm");
+                            const loader = document.getElementById("loader");
+                            const step3Approved = document.getElementById("step3Approved");
+                            const agreementCheckbox = document.getElementById("agreementCheckbox");
+                            const dhsudFile = document.getElementById("dhsudFile");
+                            const submitDhsudBtn = document.getElementById("submitDhsudBtn");
+                            const agencyInput = document.querySelector("input[placeholder='Or enter invite link here...']");
+                            const agencyJoinBtn = document.querySelector("a[href*='your-agency-directory-link']");
+
+                            let step2Done = @(!string.IsNullOrEmpty(Model.IdentificationCardUrl)).toString().toLowerCase(); // from server
+                            let step3Done = false;
+                            let step4Done = false;
+
+                            function markAgreementRead() {
+                                agreementCheckbox.disabled = false;
+                                agreementCheckbox.addEventListener("change", () => {
+                                    if (agreementCheckbox.checked) {
+                                        dhsudFile.disabled = false;
+                                        submitDhsudBtn.disabled = false;
+                                    }
+                                });
+                            }
+
+                            dhsudForm.addEventListener("submit", function (e) {
+                                e.preventDefault();
+                                loader.classList.remove("d-none");
+                                step3Approved.classList.add("d-none");
+
+                                setTimeout(() => {
+                                    loader.classList.add("d-none");
+                                    step3Approved.classList.remove("d-none");
+                                    step3Done = true;
+                                    checkAllSteps();
+                                }, 2000); // Simulate 2 seconds processing
+                            });
+
+                            // Step 4 detection: either input has value OR user clicks Join button
+                            agencyInput.addEventListener("input", () => {
+                                if (agencyInput.value.trim() !== "") {
+                                    step4Done = true;
+                                    checkAllSteps();
+                                }
+                            });
+
+                            agencyJoinBtn.addEventListener("click", () => {
+                                step4Done = true;
+                                checkAllSteps();
+                            });
+
+                            function checkAllSteps() {
+                                if (step2Done === true || step2Done === "true") {
+                                    if (step3Done && step4Done) {
+                                        // All steps complete, send AJAX to verify agent
+                                        fetch("/Home/VerifyAgent", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                                            },
+                                            body: JSON.stringify({ isVerified: true })
+                                        })
+                                            .then(response => {
+                                                if (response.ok) {
+                                                    alert("You are now a verified agent!");
+                                                    location.reload();
+                                                } else {
+                                                    alert("Something went wrong verifying you.");
+                                                }
+                                            })
+                                            .catch(err => {
+                                                console.error(err);
+                                                alert("An error occurred during verification.");
+                                            });
+                                    }
+                                }
+                            }
+                    </script>
+                    }
+
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

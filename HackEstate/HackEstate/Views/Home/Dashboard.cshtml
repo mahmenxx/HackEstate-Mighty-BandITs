@@ -118,10 +118,37 @@
         }
         else
         {
-            foreach (var agent in listAgents)
-            {
-                <p>@agent.FirstName</p>
-            }
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+                @foreach (var agent in listAgents)
+                {
+                    <div class="col-md-4 agent-card" data-name="John Smith" data-badges="residential investment first-time elite-agent">
+                        <div class="agent-card">
+                            <img src="~/porter.jpg" alt="John Smith">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                 @agent.FirstName @agent.LastName
+                                    <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                                </h3>
+                                <div class="contact-info">
+                                    <p class="card-text text-muted">
+                                    📍 <strong>Address:</strong> @agent.Address <br />
+                                        📞 <strong>Contact:</strong> @agent.Contact
+                                        📞 <strong>Description:</strong> @agent.Description
+                                    </p>
+                                </div>
+                                <div class="badges">
+                                    <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                                    <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                                    <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                                    <i class="fa fa-medal badge-elite-agent" title="Elite Agent"></i>
+                                </div>
+                                <a href="mailto:john.smith@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
 
         }
     }
