@@ -1,0 +1,385 @@
+﻿@{
+Layout = "~/Views/Shared/_MainLayout.cshtml";}
+<!--/ Agents Section /-->
+<section class="agents-section">
+    <div class="full-width">
+        <h2 class="section-title">Our Agents</h2>
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="fa fa-search"></i>
+                <input type="text" id="agentSearch" placeholder="Search Agents..." onkeyup="searchAgents()">
+            </div>
+        </div>
+
+        <div class="agents-per-page">
+            <label for="agentsPerPage">Agents per page:</label>
+            <select id="agentsPerPage" onchange="updateAgentsPerPage()">
+                <option value="3">3</option>
+                <option value="6" selected>6</option>
+                <option value="9">9</option>
+                <option value="12">12</option>
+            </select>
+        </div>
+
+        <div class="row full-width-row" id="agentList">
+            <!-- Agent 1 -->
+            <div class="col-md-4 agent-card" data-name="Jane Doe" data-badges="luxury residential negotiation top-performer">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Jane Doe">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Jane Doe
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-123-4567</p>
+                            <p><i class="fa fa-envelope"></i> jane.doe@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa-solid fa-medal badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-certificate badge-top-performer" title="Top Performer"></i>
+                        </div>
+                        <a href="mailto:jane.doe@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 2 -->
+            <div class="col-md-4 agent-card" data-name="John Smith" data-badges="residential investment first-time elite-agent">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" alt="John Smith">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            John Smith
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-987-6543</p>
+                            <p><i class="fa fa-envelope"></i> john.smith@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                            <i class="fa fa-medal badge-elite-agent" title="Elite Agent"></i>
+                        </div>
+                        <a href="mailto:john.smith@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 3 -->
+            <div class="col-md-4 agent-card" data-name="Emily Johnson" data-badges="investment commercial">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1517841903200-7b87d4b7f7f7" alt="Emily Johnson">
+                    <div class="card-body">
+                        <h3 class="card-title">Emily Johnson</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-456-7890</p>
+                            <p><i class="fa fa-envelope"></i> emily.johnson@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-building badge-commercial" title="Commercial Expert"></i>
+                        </div>
+                        <a href="mailto:emily.johnson@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 4 -->
+            <div class="col-md-4 agent-card" data-name="Michael Brown" data-badges="luxury negotiation top-performer">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Michael Brown">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Michael Brown
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-321-6547</p>
+                            <p><i class="fa fa-envelope"></i> michael.brown@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-crown badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-ribbon badge-top-performer" title="Top Performer"></i>
+                        </div>
+                        <a href="mailto:michael.brown@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 5 -->
+            <div class="col-md-4 agent-card" data-name="Sarah Davis" data-badges="residential first-time commercial">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df" alt="Sarah Davis">
+                    <div class="card-body">
+                        <h3 class="card-title">Sarah Davis</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-654-3210</p>
+                            <p><i class="fa fa-envelope"></i> sarah.davis@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                            <i class="fa fa-building badge-commercial" title="Commercial Expert"></i>
+                        </div>
+                        <a href="mailto:sarah.davis@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 6 -->
+            <div class="col-md-4 agent-card" data-name="David Wilson" data-badges="investment negotiation luxury elite-agent">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1522556189639-b1509e2e7f4a" alt="David Wilson">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            David Wilson
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-789-1234</p>
+                            <p><i class="fa fa-envelope"></i> david.wilson@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-crown badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-medal badge-elite-agent" title="Elite Agent"></i>
+                        </div>
+                        <a href="mailto:david.wilson@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 7 -->
+            <div class="col-md-4 agent-card" data-name="Laura Martinez" data-badges="first-time residential">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1517365830466-8ff26d33a787" alt="Laura Martinez">
+                    <div class="card-body">
+                        <h3 class="card-title">Laura Martinez</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-234-5678</p>
+                            <p><i class="fa fa-envelope"></i> laura.martinez@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                        </div>
+                        <a href="mailto:laura.martinez@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 8 -->
+            <div class="col-md-4 agent-card" data-name="Chris Lee" data-badges="commercial negotiation investment luxury top-performer">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1492562080023-ab79041b1e1e" alt="Chris Lee">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Chris Lee
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-876-5432</p>
+                            <p><i class="fa fa-envelope"></i> chris.lee@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-building badge-commercial" title="Commercial Expert"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-crown badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-ribbon badge-top-performer" title="Top Performer"></i>
+                        </div>
+                        <a href="mailto:chris.lee@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 9 -->
+            <div class="col-md-4 agent-card" data-name="Anna Taylor" data-badges="luxury first-time">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe" alt="Anna Taylor">
+                    <div class="card-body">
+                        <h3 class="card-title">Anna Taylor</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-345-6789</p>
+                            <p><i class="fa fa-envelope"></i> anna.taylor@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-crown badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                        </div>
+                        <a href="mailto:anna.taylor@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 10 -->
+            <div class="col-md-4 agent-card" data-name="Mark Evans" data-badges="investment residential negotiation elite-agent">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1519085360753-afccb9909d4e" alt="Mark Evans">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Mark Evans
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-567-8901</p>
+                            <p><i class="fa fa-envelope"></i> mark.evans@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-medal badge-elite-agent" title="Elite Agent"></i>
+                        </div>
+                        <a href="mailto:mark.evans@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 11 -->
+            <div class="col-md-4 agent-card" data-name="Rachel Green" data-badges="first-time commercial">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb" alt="Rachel Green">
+                    <div class="card-body">
+                        <h3 class="card-title">Rachel Green</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-678-9012</p>
+                            <p><i class="fa fa-envelope"></i> rachel.green@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                            <i class="fa fa-building badge-commercial" title="Commercial Expert"></i>
+                        </div>
+                        <a href="mailto:rachel.green@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 12 -->
+            <div class="col-md-4 agent-card" data-name="Tom Harris" data-badges="luxury investment negotiation first-time top-performer elite-agent">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d" alt="Tom Harris">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Tom Harris
+                            <i class="fa fa-check-circle verified-badge" title="Verified Agent"></i>
+                        </h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-789-0123</p>
+                            <p><i class="fa fa-envelope"></i> tom.harris@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-crown badge-luxury" title="Luxury Properties"></i>
+                            <i class="fa fa-chart-line badge-investment" title="Investment Specialist"></i>
+                            <i class="fa fa-handshake-o badge-negotiation" title="Negotiation Expert"></i>
+                            <i class="fa fa-key badge-first-time" title="First-Time Buyer Specialist"></i>
+                            <i class="fa fa-ribbon badge-top-performer" title="Top Performer"></i>
+                            <i class="fa fa-medal badge-elite-agent" title="Elite Agent"></i>
+                        </div>
+                        <a href="mailto:tom.harris@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Agent 13 -->
+            <div class="col-md-4 agent-card" data-name="Lisa Adams" data-badges="residential commercial">
+                <div class="agent-card">
+                    <img src="https://images.unsplash.com/photo-1492106040409-4e99cdead932" alt="Lisa Adams">
+                    <div class="card-body">
+                        <h3 class="card-title">Lisa Adams</h3>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> +1 555-890-1234</p>
+                            <p><i class="fa fa-envelope"></i> lisa.adams@eventtahan.com</p>
+                        </div>
+                        <div class="badges">
+                            <i class="fa fa-home badge-residential" title="Residential Expert"></i>
+                            <i class="fa fa-building badge-commercial" title="Commercial Expert"></i>
+                        </div>
+                        <a href="mailto:lisa.adams@eventtahan.com" class="btn btn-contact">Contact Agent</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <div class="pagination" id="pagination">
+                <button onclick="changePage('prev')">Previous</button>
+                <div id="pageNumbers"></div>
+                <button onclick="changePage('next')">Next</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+      let agentsPerPage = 6; // Default value
+    let currentPage = 1;
+    let allAgents = [];
+    let filteredAgents = [];
+
+    // Initialize on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        allAgents = Array.from(document.querySelectorAll("#agentList .agent-card"));
+        filteredAgents = [...allAgents];
+        updatePagination();
+        displayAgents();
+    });
+
+    function updateAgentsPerPage() {
+        agentsPerPage = parseInt(document.getElementById("agentsPerPage").value);
+        currentPage = 1;
+        updatePagination();
+        displayAgents();
+    }
+
+    function searchAgents() {
+        const input = document.getElementById("agentSearch").value.toLowerCase();
+        filteredAgents = allAgents.filter(agent => {
+            const name = agent.getAttribute("data-name").toLowerCase();
+            const badges = agent.getAttribute("data-badges").toLowerCase();
+            return name.includes(input) || badges.includes(input);
+        });
+        currentPage = 1;
+        updatePagination();
+        displayAgents();
+    }
+
+    function displayAgents() {
+        const start = (currentPage - 1) * agentsPerPage;
+        const end = start + agentsPerPage;
+        allAgents.forEach(agent => (agent.style.display = "none"));
+        filteredAgents.slice(start, end).forEach(agent => (agent.style.display = ""));
+    }
+
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredAgents.length / agentsPerPage);
+        const pageNumbersDiv = document.getElementById("pageNumbers");
+        pageNumbersDiv.innerHTML = "";
+
+        // Add page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const pageSpan = document.createElement("span");
+            pageSpan.textContent = i;
+            pageSpan.className = i === currentPage ? "active-page" : "";
+            pageSpan.onclick = () => goToPage(i);
+            pageNumbersDiv.appendChild(pageSpan);
+        }
+
+        // Update button states
+        document.querySelector(".pagination button:first-child").disabled = currentPage === 1;
+        document.querySelector(".pagination button:last-child").disabled = currentPage === totalPages;
+    }
+
+    function changePage(direction) {
+        const totalPages = Math.ceil(filteredAgents.length / agentsPerPage);
+        if (direction === "prev" && currentPage > 1) {
+            currentPage--;
+        } else if (direction === "next" && currentPage < totalPages) {
+            currentPage++;
+        }
+        updatePagination();
+        displayAgents();
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        updatePagination();
+        displayAgents();
+    }
+</script>

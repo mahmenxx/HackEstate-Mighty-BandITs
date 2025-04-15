@@ -12,5 +12,12 @@ namespace HackEstate.Controllers
         {
             return View();
         }
+            
+        public IActionResult Landing() {
+            return View();
+        }
+        public IActionResult Agents() {
+            return View();
+        }
     }
 }

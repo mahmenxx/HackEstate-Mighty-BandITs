@@ -1,0 +1,434 @@
+﻿body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+/* Full-width Navbar */
+.navbar {
+    width: 100%;
+    padding: 15px 20px;
+}
+
+    .navbar .container {
+        max-width: 100%;
+    }
+
+/* Agents Section */
+.agents-section {
+    padding: 80px 0;
+    background: #f5f7fa;
+    width: 100%;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: center;
+    animation: slideInLeft 1s ease-in-out;
+}
+
+    .section-title::after {
+        content: '';
+        width: 50px;
+        height: 4px;
+        background: #368834;
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+/* Enhanced Search Container */
+.search-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+    border-radius: 30px;
+    padding: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+    .search-container .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-container input {
+        width: 100%;
+        padding: 15px 20px 15px 50px;
+        border-radius: 25px;
+        border: none;
+        font-size: 1.1rem;
+        color: #2d3748;
+        background: white;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+        .search-container input:focus {
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 0 0.2rem rgba(54, 136, 52, 0.25);
+        }
+
+        .search-container input::placeholder {
+            color: #999;
+            font-style: italic;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-container input:focus::placeholder {
+            opacity: 0;
+        }
+
+    .search-container .fa-search {
+        position: absolute;
+        left: 20px;
+        color: #368834;
+        font-size: 1.2rem;
+    }
+
+/* Agents Per Page Selector */
+.agents-per-page {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+    .agents-per-page label {
+        margin-right: 10px;
+        font-size: 1rem;
+        color: #2d3748;
+    }
+
+    .agents-per-page select {
+        padding: 8px 12px;
+        border-radius: 20px;
+        border: none;
+        background: #368834;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .agents-per-page select:hover {
+            background: #2a6b28;
+        }
+
+.agent-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+}
+
+    .agent-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .agent-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .agent-card .card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .agent-card .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .agent-card .card-title .verified-badge {
+            margin-left: 8px;
+            color: #368834;
+            font-size: 1rem;
+        }
+
+    .agent-card .contact-info {
+        font-size: 0.9rem;
+        color: #368834;
+        margin-bottom: 15px;
+    }
+
+    .agent-card .badges {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+        .agent-card .badges i {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+            .agent-card .badges i:hover {
+                transform: scale(1.2);
+            }
+
+/* Badge Styles */
+.badge-luxury {
+    color: #FFD700; /* Gold */
+}
+
+.badge-residential {
+    color: #1E90FF; /* Blue */
+}
+
+.badge-investment {
+    color: #8A2BE2; /* Purple */
+}
+
+.badge-commercial {
+    color: #FF8C00; /* Orange */
+}
+
+.badge-first-time {
+    color: #20B2AA; /* Teal */
+}
+
+.badge-negotiation {
+    color: #368834; /* EventTahan Green */
+}
+
+.badge-top-performer {
+    color: #FF69B4; /* Pink */
+}
+
+.badge-elite-agent {
+    color: #C0C0C0; /* Silver */
+}
+
+.agent-card .btn-contact {
+    background: #368834;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+    .agent-card .btn-contact:hover {
+        background: #2a6b28;
+        transform: translateY(-3px);
+    }
+
+/* Full-width Content */
+.full-width {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.row.full-width-row {
+    margin: 0;
+    padding: 0 15px;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    .pagination button, .pagination span {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .pagination button {
+        background: #368834;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+        .pagination button:hover {
+            background: #2a6b28;
+            transform: translateY(-2px);
+        }
+
+        .pagination button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+    .pagination span {
+        background: #f0f4f8;
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .pagination .active-page {
+        background: #368834;
+        color: white;
+    }
+
+/* Footer */
+.section-footer, footer {
+    width: 100%;
+    padding: 0 20px;
+}
+
+    .section-footer .container, footer .container {
+        max-width: 100%;
+    }
+
+/* Animations */
+.agent-card:nth-child(1) {
+    animation: fadeInUp 1s ease-in-out 0.2s backwards;
+}
+
+.agent-card:nth-child(2) {
+    animation: fadeInUp 1s ease-in-out 0.4s backwards;
+}
+
+.agent-card:nth-child(3) {
+    animation: fadeInUp 1s ease-in-out 0.6s backwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 8px 25px rgba(54, 136, 52, 0.2);
+    }
+
+    100% {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@keyframes wave {
+    0% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-5px);
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    75% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .agent-card img {
+        height: 200px;
+    }
+
+    .agent-card .card-title {
+        font-size: 1.3rem;
+    }
+
+    .agent-card .contact-info {
+        font-size: 0.85rem;
+    }
+
+    .agent-card .badges i {
+        font-size: 1.2rem;
+    }
+
+    .search-container {
+        max-width: 100%;
+        padding: 8px;
+    }
+
+        .search-container input {
+            padding: 12px 15px 12px 45px;
+            font-size: 1rem;
+        }
+
+        .search-container .fa-search {
+            left: 15px;
+            font-size: 1rem;
+        }
+
+    .full-width {
+        padding: 0 15px;
+    }
+
+    .pagination button, .pagination span {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .agents-per-page label {
+        font-size: 0.9rem;
+    }
+
+    .agents-per-page select {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
